@@ -3,7 +3,7 @@
 <br />
 
 <div align="center">
-  <strong>All Payloads, Different Methods</strong>
+  <h2>All Payloads, Different Methods</h2>
 </div>
 
 <br />
