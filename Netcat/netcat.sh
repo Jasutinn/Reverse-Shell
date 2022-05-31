@@ -10,7 +10,7 @@ if
 
 clear;
 
-printf "\nlistening to $IP/$PORT ..."
+printf "\nremote hosting on $IP/$PORT ..."
 
 then
 
