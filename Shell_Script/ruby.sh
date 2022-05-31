@@ -17,7 +17,7 @@ clear;
 
 if
 
-printf "\nlistening..."
+printf "\nrunning..."
 
 then
 
